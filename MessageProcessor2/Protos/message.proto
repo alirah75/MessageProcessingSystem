@@ -1,0 +1,41 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "MessageProcessor2.Services";
+
+package message;
+
+// Defines the gRPC service for message processing
+service MessageService {
+    // Registers a processor
+    rpc RegisterProcessor (ProcessorInfo) returns (ProcessorResponse);
+    // Streams messages bidirectionally
+    rpc StreamMessages (stream MessageRequest) returns (stream MessageResponse);
+}
+
+// Processor registration details
+message ProcessorInfo {
+    string id = 1;      // Unique processor ID
+    string type = 2;    // Processor type (e.g., RegexEngine)
+}
+
+// Response for processor registration
+message ProcessorResponse {
+    bool isActive = 1;  // Indicates if processor is active
+}
+
+// Client message request
+message MessageRequest {
+    int32 id = 1;       // Message ID
+    string sender = 2;  // Sender name
+    string message = 3; // Message content
+}
+
+// Server message response
+message MessageResponse {
+    int32 id = 1;                   // Message ID
+    string engine = 2;              // Processing engine name
+    int32 messageLength = 3;        // Length of the message
+    bool isValid = 4;               // Validity of the message
+    map<string, string> regex_patterns = 5;  // Regex patterns to apply
+    string raw_message = 6;         // Raw message content
+}

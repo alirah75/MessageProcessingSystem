@@ -1,0 +1,34 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "MessageDispatcher2.Services";
+
+package message;
+
+service MessageService {
+    rpc RegisterProcessor (ProcessorInfo) returns (ProcessorResponse);
+    rpc StreamMessages (stream MessageRequest) returns (stream MessageResponse);
+}
+
+message ProcessorInfo {
+    string id = 1;
+    string type = 2;
+}
+
+message ProcessorResponse {
+    bool isActive = 1;
+}
+
+message MessageRequest {
+    int32 id = 1;
+    string sender = 2;
+    string message = 3;
+}
+
+message MessageResponse {
+    int32 id = 1;
+    string engine = 2;
+    int32 message_length = 3;
+    bool is_valid = 4;
+    map<string, string> regex_patterns = 5;
+    string raw_message = 6;
+}
